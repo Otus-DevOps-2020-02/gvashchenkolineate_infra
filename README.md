@@ -4,6 +4,9 @@ gvashchenkolineate Infra repository
 
 # ДЗ "Знакомство с облачной инфраструктурой"
 
+bastion_IP = 35.228.36.183
+someinternalhost_IP = 10.166.0.6
+
 ## Дополнительное задание
 Как подключиться с локальной машины с помощью команды вида `ssh someinternalhost`:
 
