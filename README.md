@@ -22,7 +22,7 @@ someinternalhost_IP = 10.166.0.6
     Host someinternalhost
       HostName     10.166.0.5
       User         gvashchenkolineate
-      ProxyCommand ssh -W %h:%p bastion
+      ProxyJump    bastion
     ```
 - Теперь для подключения к инстансу **someinternalhost** в приватной сети GCP проекта можно использовать команду
     ```
