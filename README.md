@@ -5,6 +5,7 @@ gvashchenkolineate Infra repository
 # ДЗ-3 "Знакомство с облачной инфраструктурой"
 
 bastion_IP = 35.228.36.183
+
 someinternalhost_IP = 10.166.0.6
 
 ## Дополнительное задание
@@ -33,6 +34,7 @@ someinternalhost_IP = 10.166.0.6
 # ДЗ-4 "Деплой тестового приложения"
 
 testapp_IP = 35.205.238.0
+
 testapp_port = 9292
 
 
