@@ -1,19 +1,30 @@
 {
   "variables": {
     "project_ID": null,
+    "zone": "europe-west1-b",
     "source_image_family": null,
-    "machine_type": "f1-micro"
+    "network": "default",
+    "machine_type": "f1-micro",
+    "disk_type": "pd-standard",
+    "disk_size": "10"
   },
   "builders": [
     {
       "type": "googlecompute",
       "project_id": "{{user `project_ID`}}",
       "image_name": "reddit-base-{{timestamp}}",
+      "image_description": "Monolith Reddit app",
       "image_family": "reddit-base",
       "source_image_family": "{{user `source_image_family`}}",
-      "zone": "europe-west1-b",
+      "zone": "{{user `zone`}}",
+      "network": "{{user `network`}}",
       "ssh_username": "appuser",
-      "machine_type": "{{user `machine_type`}}"
+      "machine_type": "{{user `machine_type`}}",
+      "disk_type": "{{user `disk_type`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "tags": [
+        "puma-server"
+      ]
     }
   ],
   "provisioners": [
