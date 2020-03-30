@@ -1,6 +1,7 @@
 # gvashchenkolineate_infra
 gvashchenkolineate Infra repository
 
+---
 
 # ДЗ-3 "Знакомство с облачной инфраструктурой"
 
@@ -30,6 +31,7 @@ someinternalhost_IP = 10.166.0.6
     ssh someinternalhost
     ```
 
+---
 
 # ДЗ-4 "Деплой тестового приложения"
 
@@ -86,3 +88,13 @@ testapp_port = 9292
       --source-ranges=0.0.0.0/0 \
       --allow=tcp:9292
    ```
+
+---
+
+# ДЗ-5 "Сборка образов VM при помощи Packer"
+
+ - Создан Packer-шаблон для сборки [базового образа ВМ](./packer/ubuntu16.json) с предустановленными Ruby, MongoDB
+ - Packer-шаблон параметризован пользовательскими переменными ([пример](./packer/variables.json.example))
+ - Создан Packer-шаблон для сборки [полного образа ВМ](./packer/immutable.json) на основе базового образа с предустановленным и автоматически запускаемым
+   с помощью **systemd unit** приложением
+ - Gcloud-команда создания инстанса вынесена в скрипт [create-redditvm.sh](./config-scripts/create-redditvm.sh)

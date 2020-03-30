@@ -1,0 +1,10 @@
+[Unit]
+Description=Monolith Reddit app
+
+[Service]
+Type=simple
+WorkingDirectory=/opt/reddit
+ExecStart=/usr/local/bin/puma
+
+[Install]
+WantedBy=multi-user.target

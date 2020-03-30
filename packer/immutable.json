@@ -1,0 +1,52 @@
+{
+  "variables": {
+    "project_ID": null,
+    "zone": "europe-west1-b",
+    "source_image": null,
+    "network": "default",
+    "machine_type": "f1-micro",
+    "disk_type": "pd-standard",
+    "disk_size": "10"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `project_ID`}}",
+      "image_name": "reddit-full-{{timestamp}}",
+      "image_description": "Monolith Reddit app",
+      "source_image": "{{user `source_image`}}",
+      "image_family": "reddit-full",
+      "zone": "{{user `zone`}}",
+      "network": "{{user `network`}}",
+      "ssh_username": "appuser",
+      "machine_type": "{{user `machine_type`}}",
+      "disk_type": "{{user `disk_type`}}",
+      "disk_size": "{{user `disk_size`}}",
+      "tags": [
+        "puma-server"
+      ]
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "script": "scripts/deploy.sh",
+      "execute_command": "sudo {{.Path}}"
+    },
+    {
+      "type": "file",
+      "source": "files/app.service",
+      "destination": "/tmp/app.service"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo cp /tmp/app.service /etc/systemd/system/app.service",
+        "sudo chmod 644 /etc/systemd/system/app.service",
+        "sudo systemctl start app",
+        "sudo systemctl status app",
+        "sudo systemctl enable app"
+      ]
+    }
+  ]
+}

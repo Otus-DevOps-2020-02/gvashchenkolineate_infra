@@ -1,0 +1,8 @@
+
+.project
+.sw[po]
+.DS_Store
+.vscode
+.idea
+
+variables.json
