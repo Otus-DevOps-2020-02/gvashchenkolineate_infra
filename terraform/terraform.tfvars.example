@@ -1,5 +1,6 @@
 project          = "infra-NNNNNN"
 disk_image       = "reddit-base-NNNNNNNNNN"
+instance_count   = 2
 user_public_key_path_map = {
   // user : path to public key
   "user1" : "~/.ssh/key1.pub",

@@ -13,6 +13,10 @@ variable zone {
 variable disk_image {
   description = "Disk image"
 }
+variable instance_count {
+  description = "Number of instances to create"
+  default = "1"
+}
 variable user_public_key_path_map {
   # Описание переменной
   description = "Map of user - public key path for Project ssh access"

@@ -4,9 +4,7 @@ resource "google_compute_instance_group" "reddit-app-umig" {
   description = "Monolith Reddit app unmanaged instance group"
   zone        = var.zone
 
-  instances = [
-    google_compute_instance.app.self_link
-  ]
+  instances = google_compute_instance.app.*.self_link
 
   named_port {
     name = "puma"
@@ -51,6 +49,5 @@ resource "google_compute_global_forwarding_rule" "reddit-app-fr" {
   name        = "reddit-app-fr"
   description = "Monolith Reddit app global forwarding rule"
   target      = google_compute_target_http_proxy.reddit-app-tp.self_link
-  port_range  = "80"
-  ip_protocol = "HTTP"
+  port_range  = "80-80"
 }
