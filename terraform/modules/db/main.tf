@@ -17,7 +17,7 @@ resource "google_compute_instance" "db" {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
 }
-//---------------------------------------------------------------------- firewall rule puma
+//---------------------------------------------------------------------- firewall rule mongo
 resource "google_compute_firewall" "firewall_mongo" {
   name = "default-allow-mongo"
   network = "default"
