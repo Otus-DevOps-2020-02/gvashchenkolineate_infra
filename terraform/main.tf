@@ -30,3 +30,7 @@ module "db" {
   db_disk_image   = var.db_disk_image
   public_key_path = var.public_key_path
 }
+//---------------------------------------------------------------------- vpc
+module "vpc" {
+  source = "./modules/vpc"
+}
