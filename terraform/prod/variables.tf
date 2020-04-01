@@ -4,7 +4,7 @@ variable project {
 
 variable region {
   description = "Region"
-  default = "europe-west1"
+  default     = "europe-west1"
 }
 
 variable zone {
@@ -18,17 +18,17 @@ variable disk_image {
 
 variable app_disk_image {
   description = "Disk image for reddit app"
-  default = "reddit-app-base"
+  default     = "reddit-app-base"
 }
 
 variable db_disk_image {
   description = "Disk image for reddit db"
-  default = "reddit-db-base"
+  default     = "reddit-db-base"
 }
 
 variable instance_count {
   description = "Number of instances to create"
-  default = "1"
+  default     = "1"
 }
 
 variable user_public_key_path_map {
@@ -45,5 +45,5 @@ variable private_key_path {
 
 variable ssh_source_range {
   description = "IP range allowed to connect to instances via ssh"
-  default = ["0.0.0.0/0"]
+  default     = ["0.0.0.0/0"]
 }

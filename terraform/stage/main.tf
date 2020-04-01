@@ -6,7 +6,7 @@ terraform {
 provider "google" {
   version = "~>2.5.0"
   project = var.project
-  region = var.region
+  region  = var.region
 }
 //---------------------------------------------------------------------- project_metadata
 resource "google_compute_project_metadata" "default" {
@@ -17,21 +17,21 @@ resource "google_compute_project_metadata" "default" {
 }
 //---------------------------------------------------------------------- app
 module "app" {
-  source          = "./modules/app"
-  zone            = var.zone
-  app_disk_image  = var.app_disk_image
-  public_key_path = var.public_key_path
+  source           = "../modules/app"
+  zone             = var.zone
+  app_disk_image   = var.app_disk_image
+  public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
 }
 //---------------------------------------------------------------------- db
 module "db" {
-  source          = "./modules/db"
+  source          = "../modules/db"
   zone            = var.zone
   db_disk_image   = var.db_disk_image
   public_key_path = var.public_key_path
 }
 //---------------------------------------------------------------------- vpc
 module "vpc" {
-  source = "./modules/vpc"
-  source_ranges = var.ssh_source_range
+  source        = "../modules/vpc"
+  source_ranges = ["0.0.0.0/0"]
 }
