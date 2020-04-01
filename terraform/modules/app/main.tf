@@ -27,11 +27,11 @@ resource "google_compute_instance" "app" {
     private_key = file(var.private_key_path)
   }
   provisioner "file" {
-    source      = "files/puma.service"
+    source      = "${path.module}/files/puma.service"
     destination = "/tmp/puma.service"
   }
   provisioner "remote-exec" {
-    script = "files/deploy.sh"
+    script = "${path.module}/files/deploy.sh"
   }
 }
 //---------------------------------------------------------------------- IP Address
