@@ -34,7 +34,9 @@ resource "google_compute_instance" "app" {
   tags = ["reddit-app"]
   network_interface {
     network = "default"
-    access_config {}
+    access_config {
+      nat_ip = google_compute_address.app_ip.address
+    }
   }
   metadata = {
     ssh-keys = "appuser:${file(var.public_key_path)}"
@@ -55,7 +57,11 @@ resource "google_compute_instance" "app" {
     script = "files/deploy.sh"
   }
 }
-//---------------------------------------------------------------------- firewall
+//---------------------------------------------------------------------- IP Address
+resource "google_compute_address" "app_ip" {
+  name = "reddit-app-ip"
+}
+//---------------------------------------------------------------------- firewall rule puma
 resource "google_compute_firewall" "firewall_puma" {
   name = "default-allow-puma"
   # Название сети, в которой действует правило
@@ -69,4 +75,17 @@ resource "google_compute_firewall" "firewall_puma" {
   source_ranges = ["0.0.0.0/0"]
   # Правило применимо для инстансов с перечисленными тэгами
   target_tags = ["reddit-app"]
+}
+//---------------------------------------------------------------------- firewall rule ssh
+resource "google_compute_firewall" "firewall_ssh" {
+  name = "default-allow-ssh"
+  network = "default"
+  description = "Allow SSH from anywhere"
+
+  allow {
+    protocol = "tcp"
+    ports = ["22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
 }
