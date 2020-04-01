@@ -33,4 +33,5 @@ module "db" {
 //---------------------------------------------------------------------- vpc
 module "vpc" {
   source = "./modules/vpc"
+  source_ranges = var.ssh_source_range
 }
