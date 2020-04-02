@@ -18,6 +18,7 @@ module "app" {
   app_disk_image   = var.app_disk_image
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
+  deploy_app = true
 }
 //---------------------------------------------------------------------- db
 module "db" {
@@ -29,5 +30,5 @@ module "db" {
 //---------------------------------------------------------------------- vpc
 module "vpc" {
   source        = "../modules/vpc"
-  source_ranges = ["92.255.181.244/32"]
+  source_ranges = ["92.255.181.244/32"] // hardcoded allowed IPs
 }

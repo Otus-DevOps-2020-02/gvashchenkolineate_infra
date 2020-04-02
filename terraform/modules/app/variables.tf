@@ -15,3 +15,7 @@ variable public_key_path {
 variable private_key_path {
   description = "Path to the private key used for ssh access to app instances"
 }
+variable deploy_app {
+  description = "Whether to deploy the app"
+  default = true
+}
