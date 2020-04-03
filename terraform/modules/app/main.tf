@@ -20,6 +20,16 @@ resource "google_compute_instance" "app" {
     ssh-keys = "appuser:${file(var.public_key_path)}"
   }
 }
+//---------------------------------------------------------------------- conditionally create systemd unit file
+resource "local_file" "systemd_unit_file" {
+  count = var.deploy_app ? 1 : 0
+
+  content = templatefile("${path.module}/files/puma.service.tpl", {
+    database_url = var.database_url
+  })
+
+  filename = "${path.module}/files/puma.service"
+}
 //---------------------------------------------------------------------- conditionally use deploy provisioners
 resource "null_resource" "cluster" {
   count = var.deploy_app ? 1 : 0

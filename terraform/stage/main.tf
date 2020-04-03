@@ -19,6 +19,7 @@ module "app" {
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
   deploy_app = true
+  database_url = module.db.internal_ip
 }
 //---------------------------------------------------------------------- db
 module "db" {

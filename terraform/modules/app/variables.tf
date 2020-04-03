@@ -19,3 +19,7 @@ variable deploy_app {
   description = "Whether to deploy the app"
   default = true
 }
+variable database_url {
+  description = "Database URL. Specify if other than localhost"
+  default = "localhost"
+}
