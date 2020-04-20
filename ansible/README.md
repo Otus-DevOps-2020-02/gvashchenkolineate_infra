@@ -13,3 +13,8 @@
   - Using host group name:
 
     - `ansible app -m ping`
+
+  - Using YAML-inventory:
+
+    - `ansible app -m shell -a 'ruby -v; bundler -v' -i inventory.yml`
+    - `ansible db -m service -a name=mongod -i inventory.yml`
