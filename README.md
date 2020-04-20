@@ -136,7 +136,10 @@ testapp_port = 9292
 
 # ДЗ-6 "Управление конфигурацией. Основные DevOps инструменты. Знакомство с Ansible"
 
-  - Выполненеие Ansible-плэйбука [clone.yml](./ansible/clone.yml)  при наличии уже склонированного репозитория
+  - Создан Ansible-проект с инвентори из хостов, поднимаемых с помощью Terraform-проекта [stage](./terraform/stage),
+    в различных форматах: ini, yaml, json
+
+  - Выполненеие Ansible-плэйбука [clone.yml](./ansible/clone.yml) при наличии уже склонированного репозитория
     даёт результат:
     ```
     PLAY RECAP **********************************************************************************************
@@ -148,3 +151,16 @@ testapp_port = 9292
     appserver                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
     ```
     Т.е. появилось `changed=1`, а значит в первом случае Ansible не производит никаких действий, а во втором - клонирует репозиторий.
+
+  - Для генерации inventory в json-формате можно воспользоваться командой
+
+    ` ansible-inventory --list > inventory.json`
+
+    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](./ansible/inventory.py)),
+    выводящий этот json. Использовать эту связку (скрипт + json) можно командой:
+
+    `ansible all -i inventory.py -m ping`
+
+    или
+
+    `ansible all -m ping` (если прописать `inventory = ./inventory.py`  в [ansible.cfd](./ansible/ansible.cfg))
