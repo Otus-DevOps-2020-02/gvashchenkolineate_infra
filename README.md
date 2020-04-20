@@ -164,3 +164,9 @@ testapp_port = 9292
     или
 
     `ansible all -m ping` (если прописать `inventory = ./inventory.py`  в [ansible.cfd](./ansible/ansible.cfg))
+
+  - Вне рамок ДЗ добавлен инвентори, использующий [gcp_compute](https://docs.ansible.com/ansible/latest/plugins/inventory/gcp_compute.html) inventory plugin.
+    Использование командой:
+    `ansible all -i inventory.gcp.yml`
+    Для его функционирования требуется в GCP **IAM & Admin** создать Service Account
+    с ролью `Compute Engine - Compute Instance Admin (v1)` и скачать service account file (файл ключа).

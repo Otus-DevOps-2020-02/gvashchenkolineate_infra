@@ -1,0 +1,8 @@
+plugin: gcp_compute
+zones:
+  - europe-west1-b
+projects:
+  - infra-271206
+filters: []
+service_account_file: ./infra-271206-ca52502cef86.json
+auth_kind: serviceaccount
