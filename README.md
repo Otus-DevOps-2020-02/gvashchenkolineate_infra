@@ -120,7 +120,7 @@ testapp_port = 9292
 
 ---
 
-# ДЗ-5 "Принципы организации инфраструктурного кода и работа над инфраструктурой в команде на примере Terraform"
+# ДЗ-7 "Принципы организации инфраструктурного кода и работа над инфраструктурой в команде на примере Terraform"
 
  - Создание лоад балансера отменено.
  - Создано правило файрвола для ssh-подключения и вынесено в отдельный Terraform-модуль [vpc](./terraform/modules/vpc)
@@ -131,3 +131,44 @@ testapp_port = 9292
  - В качестве бэкенда для Terraform используется GCS корзина.
    _⭐ Управление инфраструктурой теперь можно вести не только из одного места._
    _При одновременном запуске из разных мест выполнение будет блокироваться механизмом [state lock](https://www.terraform.io/docs/state/locking.html)._
+
+---
+
+# ДЗ-8 "Управление конфигурацией. Основные DevOps инструменты. Знакомство с Ansible"
+
+  - Создан Ansible-проект с инвентори из хостов, поднимаемых с помощью Terraform-проекта [stage](./terraform/stage),
+    в различных форматах: ini, yaml, json
+
+  - Добавлен простейший плэйбук [clone.yml](./ansibe/clone.yml).
+
+    Выполненеие Ansible-плэйбука при наличии уже склонированного репозитория
+    даёт результат:
+    ```
+    PLAY RECAP **********************************************************************************************
+    appserver                  : ok=2    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+    ```
+    А при отсутствии или после его удаления (`ansible app -m command -a 'rm -rf ~/reddit'`) даёт результат:
+    ```
+    PLAY RECAP **********************************************************************************************
+    appserver                  : ok=2    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+    ```
+    Т.е. появилось `changed=1`, а значит в первом случае Ansible не производит никаких действий, а во втором - клонирует репозиторий.
+
+  - Для генерации inventory в json-формате можно воспользоваться командой
+
+    ` ansible-inventory --list > inventory.json`
+
+    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](./ansible/inventory.py)),
+    выводящий этот json. Использовать эту связку (скрипт + json) можно командой:
+
+    `ansible all -i inventory.py -m ping`
+
+    или
+
+    `ansible all -m ping` (если прописать `inventory = ./inventory.py`  в [ansible.cfd](./ansible/ansible.cfg))
+
+  - Вне рамок ДЗ добавлен инвентори, использующий [gcp_compute](https://docs.ansible.com/ansible/latest/plugins/inventory/gcp_compute.html) inventory plugin.
+    Использование командой:
+    `ansible all -i inventory.gcp.yml -m ping`
+    Для его функционирования требуется в GCP **IAM & Admin** создать Service Account
+    с ролью `Compute Engine - Compute Instance Admin (v1)` и скачать service account file (файл ключа).
