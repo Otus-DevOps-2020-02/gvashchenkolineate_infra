@@ -3,6 +3,16 @@ zones:
   - europe-west1-b
 projects:
   - infra-271206
-filters: []
-service_account_file: ./infra-271206-ca52502cef86.json
 auth_kind: serviceaccount
+service_account_file: infra-271206-036a7b2b8930.json
+filters: []
+groups:
+  app: inventory_hostname.startswith('reddit-app')
+  db: inventory_hostname.startswith('reddit-db')
+hostnames:
+  # List host by name instead of the default public ip
+  - name
+compose:
+  # Set an inventory parameter to use the Public IP address to connect to the host
+  # For Private ip use "networkInterfaces[0].networkIP"
+  ansible_host: networkInterfaces[0].accessConfigs[0].natIP
