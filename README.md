@@ -182,7 +182,7 @@ testapp_port = 9292
   - Создан плэйбук [reddit_app_one_play.yml](./ansible/reddit_app_one_play.yml)
     из одного сценария для донастройки app & db инстансов и деплоя
 
-  - Создан плэйбук [reddit_app2_multiple_plays.yml](./ansible/reddit_app2_multiple_plays.yml),
+  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/reddit_app_multiple_plays.yml),
     разбитый на три сценария: донастройки app, db и деплоя
 
   - Предыдущий плэйбук разбит на три отдельных плэйбука
