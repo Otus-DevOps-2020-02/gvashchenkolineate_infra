@@ -3,7 +3,8 @@
   hosts: app
   become: true
   vars:
-    db_host: 10.132.15.194
+    # get db instance private ip right from dynamic inventory
+    db_host: "{{ hostvars[groups['db'][0]].networkInterfaces[0].networkIP }}"
   tasks:
     - name: Add unit file for Puma
       copy:
