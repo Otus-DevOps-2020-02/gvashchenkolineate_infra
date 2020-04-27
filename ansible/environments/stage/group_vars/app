@@ -1,0 +1,4 @@
+# group_vars for app
+
+# get db instance private ip right from dynamic inventory
+db_host: "{{ hostvars[groups['db'][0]].networkInterfaces[0].networkIP }}"

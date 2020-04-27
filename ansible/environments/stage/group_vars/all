@@ -1,0 +1,3 @@
+# group_vars for all inventories
+
+env: stage
