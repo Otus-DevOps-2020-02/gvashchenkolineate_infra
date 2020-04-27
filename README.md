@@ -158,7 +158,7 @@ testapp_port = 9292
 
     ` ansible-inventory --list > inventory.json`
 
-    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](./ansible/inventory.py)),
+    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](ansible/old/inventory.py)),
     выводящий этот json. Использовать эту связку (скрипт + json) можно командой:
 
     `ansible all -i inventory.py -m ping`
@@ -179,19 +179,19 @@ testapp_port = 9292
 
 ##### Ansible
 
-  - Создан плэйбук [reddit_app_one_play.yml](./ansible/reddit_app_one_play.yml)
+  - Создан плэйбук [reddit_app_one_play.yml](ansible/playbooks/reddit_app_one_play.yml)
     из одного сценария для донастройки app & db инстансов и деплоя
 
-  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/reddit_app_multiple_plays.yml),
+  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/playbooks/reddit_app_multiple_plays.yml),
     разбитый на три сценария: донастройки app, db и деплоя
 
   - Предыдущий плэйбук разбит на три отдельных плэйбука
-     - [db.yml](./ansible/db.yml)
-     - [app.yml](./ansible/app.yml)
-     - [deploy.yml](./ansible/deploy.yml)
+     - [db.yml](ansible/playbooks/db.yml)
+     - [app.yml](ansible/playbooks/app.yml)
+     - [deploy.yml](ansible/playbooks/deploy.yml)
 
     Их последовательный вызов осуществяется четвертым плэйбуком:
-     - [site.yml](./ansible/site.yml)
+     - [site.yml](ansible/playbooks/site.yml)
 
   - (⭐) Вместо статического, использовано динамическое инвентори (**gcp_compute** plugin)
     с автоматическим разбиением на именованные группы.
@@ -200,8 +200,8 @@ testapp_port = 9292
 ##### Packer
 
   - Провижининг reddit-app-base и reddit-db-base заменен с bash-скриптов на Ansible плэйбуки:
-     - [packer_app.yml](./ansible/packer_app.yml)
-     - [packer_db.yml](./ansible/packer_db.yml)
+     - [packer_app.yml](ansible/playbooks/packer_app.yml)
+     - [packer_db.yml](ansible/playbooks/packer_db.yml)
 
 ##### Комментарии
 
