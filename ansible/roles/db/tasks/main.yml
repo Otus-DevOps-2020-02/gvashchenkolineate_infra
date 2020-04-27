@@ -2,7 +2,7 @@
 # tasks file for db
 - name: Show info about the env this host belongs to
   debug:
-  msg: "This host is in {{ env }} environment!!!"
+    msg: "This host is in {{ env }} environment!!!"
 
 - name: Change mongo config file
   template:
