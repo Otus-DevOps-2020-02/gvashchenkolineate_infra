@@ -30,3 +30,7 @@
   `ansible-inventory all -i inventory --list > inventory.json`
   `ansible-inventory all -i inventory -y --list > inventory.yml`
   `ansible-inventory all -i inventory.yml --list > inventory.json`
+
+- How to inspect [dynamic] inventory as a tree:
+
+  `ansible-inventory --graph`

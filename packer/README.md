@@ -16,3 +16,13 @@ Use following as an example to build VM images using Packer
     ```
     packer build -var-file ./variables.json immutable.json
     ```
+
+ - App VM provisioned with Ansible
+   ```
+   packer build -var-file ./variables.json app.json
+   ```
+
+ - DB VM provisioned with Ansible
+   ```
+   packer build -var-file ./variables.json db.json
+   ```

@@ -172,3 +172,39 @@ testapp_port = 9292
     `ansible all -i inventory.gcp.yml -m ping`
     Для его функционирования требуется в GCP **IAM & Admin** создать Service Account
     с ролью `Compute Engine - Compute Instance Admin (v1)` и скачать service account file (файл ключа).
+
+---
+
+# ДЗ-9 "Деплой и управление конфигурацией с Ansible"
+
+##### Ansible
+
+  - Создан плэйбук [reddit_app_one_play.yml](./ansible/reddit_app_one_play.yml)
+    из одного сценария для донастройки app & db инстансов и деплоя
+
+  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/reddit_app_multiple_plays.yml),
+    разбитый на три сценария: донастройки app, db и деплоя
+
+  - Предыдущий плэйбук разбит на три отдельных плэйбука
+     - [db.yml](./ansible/db.yml)
+     - [app.yml](./ansible/app.yml)
+     - [deploy.yml](./ansible/deploy.yml)
+
+    Их последовательный вызов осуществяется четвертым плэйбуком:
+     - [site.yml](./ansible/site.yml)
+
+  - (⭐) Вместо статического, использовано динамическое инвентори (**gcp_compute** plugin)
+    с автоматическим разбиением на именованные группы.
+    Определение переменной `db_host` изменено с хардкода на получение из динамического инвентори.
+
+##### Packer
+
+  - Провижининг reddit-app-base и reddit-db-base заменен с bash-скриптов на Ansible плэйбуки:
+     - [packer_app.yml](./ansible/packer_app.yml)
+     - [packer_db.yml](./ansible/packer_db.yml)
+
+##### Комментарии
+
+  Плэйбуки используют переменные, хэндлеры, j2-шаблоны, модули, динамическое инвентори.
+  Для использования "цельных" плэйбуков необходимо указывать нужный тэг.
+  Плэйбуки обкатывались на окружении, поднимаемом проектом [terraform/stage](./terraform/stage).
