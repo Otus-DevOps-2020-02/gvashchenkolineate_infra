@@ -2,3 +2,12 @@
 
 # get db instance private ip right from dynamic inventory
 db_host: "{{ hostvars[groups['db'][0]].networkInterfaces[0].networkIP }}"
+
+# reverse proxy config (ansible-galaxy role: jdauphant.nginx)
+nginx_sites:
+  default:
+    - listen 80
+    - server_name "reddit"
+    - location / {
+        proxy_pass http://127.0.0.1:9292;
+      }

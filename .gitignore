@@ -17,3 +17,5 @@ variables.json
 
 # Ansible tmp files
 *.retry
+# Ansible community roles
+jdauphant.nginx
