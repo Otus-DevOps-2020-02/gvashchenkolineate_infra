@@ -1,4 +1,4 @@
-# gvashchenkolineate_infra
+# gvashchenkolineate_infra [![Build Status](https://travis-ci.com/Otus-DevOps-2020-02/gvashchenkolineate_infra.svg?branch=master)](https://travis-ci.com/Otus-DevOps-2020-02/gvashchenkolineate_infra)
 gvashchenkolineate Infra repository
 
 ---
