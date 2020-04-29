@@ -208,3 +208,48 @@ testapp_port = 9292
   Плэйбуки используют переменные, хэндлеры, j2-шаблоны, модули, динамическое инвентори.
   Для использования "цельных" плэйбуков необходимо указывать нужный тэг.
   Плэйбуки обкатывались на окружении, поднимаемом проектом [terraform/stage](./terraform/stage).
+
+
+---
+
+# ДЗ-10 "Ansible: работа с ролями и окружениями"
+
+  - Созданы Ansible-роли и задействованы в соответствующих плэйбуках для донастройки инстансов:
+    - [app](./ansible/roles/app)
+    - [db](./ansible/roles/db)
+
+    Запуск обоих происходит при выполнении плэйбука [site.yml](./ansible/playbooks/site.yml)
+    ```
+    ansible-playbook site.yml -i environment/[stage|prod]/inventory.gcp.yml
+    ```
+
+    В этом и последующих пунктах плэйбуки обкатывались на окружениях, поднимаемых Terraform-проектами
+      - [terraform/stage](./terraform/stage)
+      - [terraform/prod](./terraform/prod)
+
+  - Выделены два окружения со своими переменными и инвентори:
+    - [stage](./ansible/environments/stage)
+    - [prod](./ansible/environments/prod)
+
+  - Использована Community-роль [jdauphant.nginx](https://github.com/jdauphant/ansible-role-nginx)
+    для настройки обратного прокси.
+    Теперь приложение после выполнения плэйбука [site.yml](./ansible/playbooks/site.yml)
+    доступно на стандартном http порту.
+    _(Доступ к порту puma(9292) при этом запрещен)_
+
+  - Добавлен плэйбук [users.yml](./ansible/playbooks/users.yml) для создания пользователей на всех инстансах,
+    пароли для которых зашифрованы с помощью Ansible Vault отдельно для каждого окружения.
+    _(Vault key хранится локально в `~/.ansible/vault.key`)_
+
+    Проверка после выполнения плэйбука [site.yml](./ansible/playbooks/site.yml)
+    осуществлена подключением на инстанс и переключением на каждого созданного пользователя с помощью пароля.
+
+  - (⭐) Динамическое инвентори (**gcp_compute**) из предыдущего ДЗ
+    с автоматическим разбиением на именованные группы переиспользовано для stage и prod окружений.
+
+  - (⭐⭐) В TravisCI билд добавлены `before_install` джобы для
+    - `packer validate` для всех шаблонов
+    - `terraform validate` и `tflint` для окружений stage и prod
+    - `ansible-lint` для Ansible плейбуков
+
+    В README заголовок также добавлена иконка статуса TravisCI билда коммитов и PR в `master`
