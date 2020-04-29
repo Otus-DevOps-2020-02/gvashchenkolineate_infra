@@ -1,7 +1,8 @@
 dist: trusty
-sudo: required
 language: bash
 before_install:
+  - ./travis/prepare.sh
+  - ./travis/run_checks.sh
   - curl https://raw.githubusercontent.com/express42/otus-homeworks/2020-02/run.sh | bash
 notifications:
   slack:
