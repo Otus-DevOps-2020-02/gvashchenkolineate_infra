@@ -30,12 +30,12 @@
   "provisioners": [
     {
       "type": "shell",
-      "script": "scripts/deploy.sh",
+      "script": "packer/scripts/deploy.sh",
       "execute_command": "sudo {{.Path}}"
     },
     {
       "type": "file",
-      "source": "files/app.service",
+      "source": "packer/files/app.service",
       "destination": "/tmp/app.service"
     },
     {

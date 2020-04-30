@@ -1,4 +1,4 @@
-# gvashchenkolineate_infra
+# gvashchenkolineate_infra [![Build Status](https://travis-ci.com/Otus-DevOps-2020-02/gvashchenkolineate_infra.svg?branch=master)](https://travis-ci.com/Otus-DevOps-2020-02/gvashchenkolineate_infra)
 gvashchenkolineate Infra repository
 
 ---
@@ -158,7 +158,7 @@ testapp_port = 9292
 
     ` ansible-inventory --list > inventory.json`
 
-    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](./ansible/inventory.py)),
+    Чтобы использовать inventory в json-формате потребуется скрипт (напр. [inventory.py](ansible/old/inventory.py)),
     выводящий этот json. Использовать эту связку (скрипт + json) можно командой:
 
     `ansible all -i inventory.py -m ping`
@@ -179,19 +179,19 @@ testapp_port = 9292
 
 ##### Ansible
 
-  - Создан плэйбук [reddit_app_one_play.yml](./ansible/reddit_app_one_play.yml)
+  - Создан плэйбук [reddit_app_one_play.yml](ansible/playbooks/reddit_app_one_play.yml)
     из одного сценария для донастройки app & db инстансов и деплоя
 
-  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/reddit_app_multiple_plays.yml),
+  - Создан плэйбук [reddit_app_multiple_plays.yml](ansible/playbooks/reddit_app_multiple_plays.yml),
     разбитый на три сценария: донастройки app, db и деплоя
 
   - Предыдущий плэйбук разбит на три отдельных плэйбука
-     - [db.yml](./ansible/db.yml)
-     - [app.yml](./ansible/app.yml)
-     - [deploy.yml](./ansible/deploy.yml)
+     - [db.yml](ansible/playbooks/db.yml)
+     - [app.yml](ansible/playbooks/app.yml)
+     - [deploy.yml](ansible/playbooks/deploy.yml)
 
     Их последовательный вызов осуществяется четвертым плэйбуком:
-     - [site.yml](./ansible/site.yml)
+     - [site.yml](ansible/playbooks/site.yml)
 
   - (⭐) Вместо статического, использовано динамическое инвентори (**gcp_compute** plugin)
     с автоматическим разбиением на именованные группы.
@@ -200,11 +200,56 @@ testapp_port = 9292
 ##### Packer
 
   - Провижининг reddit-app-base и reddit-db-base заменен с bash-скриптов на Ansible плэйбуки:
-     - [packer_app.yml](./ansible/packer_app.yml)
-     - [packer_db.yml](./ansible/packer_db.yml)
+     - [packer_app.yml](ansible/playbooks/packer_app.yml)
+     - [packer_db.yml](ansible/playbooks/packer_db.yml)
 
 ##### Комментарии
 
   Плэйбуки используют переменные, хэндлеры, j2-шаблоны, модули, динамическое инвентори.
   Для использования "цельных" плэйбуков необходимо указывать нужный тэг.
   Плэйбуки обкатывались на окружении, поднимаемом проектом [terraform/stage](./terraform/stage).
+
+
+---
+
+# ДЗ-10 "Ansible: работа с ролями и окружениями"
+
+  - Созданы Ansible-роли и задействованы в соответствующих плэйбуках для донастройки инстансов:
+    - [app](./ansible/roles/app)
+    - [db](./ansible/roles/db)
+
+    Запуск обоих происходит при выполнении плэйбука [site.yml](./ansible/playbooks/site.yml)
+    ```
+    ansible-playbook site.yml -i environment/[stage|prod]/inventory.gcp.yml
+    ```
+
+    В этом и последующих пунктах плэйбуки обкатывались на окружениях, поднимаемых Terraform-проектами
+      - [terraform/stage](./terraform/stage)
+      - [terraform/prod](./terraform/prod)
+
+  - Выделены два окружения со своими переменными и инвентори:
+    - [stage](./ansible/environments/stage)
+    - [prod](./ansible/environments/prod)
+
+  - Использована Community-роль [jdauphant.nginx](https://github.com/jdauphant/ansible-role-nginx)
+    для настройки обратного прокси.
+    Теперь приложение после выполнения плэйбука [site.yml](./ansible/playbooks/site.yml)
+    доступно на стандартном http порту.
+    _(Доступ к порту puma(9292) при этом запрещен)_
+
+  - Добавлен плэйбук [users.yml](./ansible/playbooks/users.yml) для создания пользователей на всех инстансах,
+    пароли для которых зашифрованы с помощью Ansible Vault отдельно для каждого окружения.
+    _(Vault key хранится локально в `~/.ansible/vault.key`)_
+
+    Проверка после выполнения плэйбука [site.yml](./ansible/playbooks/site.yml)
+    осуществлена подключением на инстанс и переключением на каждого созданного пользователя с помощью пароля.
+
+  - (⭐) Динамическое инвентори (**gcp_compute**) из предыдущего ДЗ
+    с автоматическим разбиением на именованные группы переиспользовано для stage и prod окружений.
+
+  - (⭐⭐) В TravisCI билд добавлены `before_install` джобы для
+    - `packer validate` для всех шаблонов
+    - `terraform validate` и `tflint` для окружений stage и prod
+    - `ansible-lint` для Ansible плейбуков
+
+    В README заголовок также добавлена иконка статуса TravisCI билда коммитов и PR в `master`

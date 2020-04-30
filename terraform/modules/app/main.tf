@@ -55,11 +55,23 @@ resource "google_compute_address" "app_ip" {
 }
 //---------------------------------------------------------------------- firewall rule puma
 resource "google_compute_firewall" "firewall_puma" {
+  count = 0 # don't expose puma port!
   name = "default-allow-puma"
   network = "default"
   allow {
     protocol = "tcp"
     ports    = ["9292"]
+  }
+  source_ranges = ["0.0.0.0/0"]
+  target_tags = ["reddit-app"]
+}
+//---------------------------------------------------------------------- firewall rule http
+resource "google_compute_firewall" "firewall_http" {
+  name = "reddit-app-allow-http"
+  network = "default"
+  allow {
+    protocol = "tcp"
+    ports    = ["80"]
   }
   source_ranges = ["0.0.0.0/0"]
   target_tags = ["reddit-app"]

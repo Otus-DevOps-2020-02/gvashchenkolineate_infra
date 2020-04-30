@@ -23,7 +23,7 @@
 
     `ansible all -i inventory.py -m ping`
 
-    `inventory.py` is a script printing [inventory.json](./inventory.json) to output
+    `inventory.py` is a script printing [inventory.json](old/inventory.json) to output
 
 - How to convert inventory from ini/yml to yml/json
 
