@@ -1,0 +1,14 @@
+---
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Install Ruby, rubygems and required packages
+  apt: name={{ item }} state=present
+  with_items:
+    - ruby-full
+    - ruby-bundler
+    - build-essential
+
+- name: Check Ruby and Bundler version
+  shell: ruby -v; bundler -v
+  changed_when: false
