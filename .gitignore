@@ -27,3 +27,6 @@ jdauphant.nginx
 .molecule
 .cache
 .pytest_cache
+
+# Python virtual env
+venv/
