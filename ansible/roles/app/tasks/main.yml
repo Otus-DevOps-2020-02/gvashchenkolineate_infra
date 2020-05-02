@@ -5,4 +5,7 @@
     msg: "This host is in {{ env }} environment!!!"
 
 - include: ruby.yml
+  tags: ruby
+
 - include: puma.yml
+  tags: puma
