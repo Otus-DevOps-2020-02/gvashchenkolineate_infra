@@ -19,6 +19,7 @@ variables.json
 *.retry
 # Ansible community roles
 jdauphant.nginx
+ansible/roles/db
 
 # Vagrant & Molecule
 .vagrant/
