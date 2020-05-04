@@ -34,3 +34,29 @@
 - How to inspect [dynamic] inventory as a tree:
 
   `ansible-inventory --graph`
+
+---
+
+# Vagrant
+
+| How to...          	| command                      	|
+|--------------------	|------------------------------	|
+| Bring the infra up 	| vagrant up                   	|
+| List Vagrant boxes 	| vagrant box list             	|
+| Check infra state  	| vagrant status               	|
+| Connect to VM      	| vagrant ssh _hostname_       	|
+| Provision          	| vagrant provision _hostname_ 	|
+| Bring the infra down  | vafrant destroy -f            |
+
+
+---
+
+# Molecule
+
+| How to...          	| command                      	|
+|--------------------	|------------------------------	|
+| Create infra       	| molecule create              	|
+| Infra state           | molecule list                 |__
+| Apply playbooks    	| molecule converge            	|
+| Run tests          	| molecule verify             	|
+| Destroy infra      	| molecule destroy              |
