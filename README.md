@@ -253,3 +253,103 @@ testapp_port = 9292
     - `ansible-lint` для Ansible плейбуков
 
     В README заголовок также добавлена иконка статуса TravisCI билда коммитов и PR в `master`
+
+
+---
+
+# ДЗ-11 "Разработка и тестирование Ansible ролей и плейбуков"
+
+## В процессе сделано:
+
+#### Vagrant
+
+  - Vagrant задействован для поднятия локально виртуальных машин (провайдер: VirtualBox)
+    для _app_ и _db_, идентичных тем, что создаются в GCP.
+    См. [Vagrantfile](./ansible/Vagrantfile).
+    Для провижининга ВМ используются Ansible плэйбук [site.yml](./ansible/playbooks/site.yml),
+    доработанный для предустановки python на инстансы.
+
+  - Ansible-роль [app](./ansible/roles/app) доработана для установки Ruby и т.п.
+    Packer-шаблон [app.json](./packer/app.json) настроен и протестирован использовать её при провижининге.
+
+    Также роль параметризована `deploy_user` для возможности указать, под каким пользователем производить установку и деплой.
+    Для провижининга в ВМ, создаваемых Vagrant'ом, необходимо задать `deploy_user=vagrant`
+
+  - Ansible-роль [db](./ansible/roles/db) доработана для установки MongoDB.
+    Packer-шаблон [db.json](./packer/db.json) настроен и протестирован использовать её при провижининге.
+
+  - (⭐) В Vagrantfile добавлены дополнительные параметры Ansible-провижининга
+    для корректной работы обратного прокси nginx.
+
+#### Molecule
+
+  - Сгенерирован Molecule-конфигурация для локального тестирования роли **db**.
+    В качестве драйвера используется Vagrant, провайдера - VirtualBox.
+
+  - Добавлен тест на то, что БД слушает на порту 27017, с помощью Testinfra-модуля [host.socket](https://testinfra.readthedocs.io/en/latest/modules.html#testinfra.host.Host.socket)
+
+#### (⭐) Дополнительно
+
+  - Роль **db** вынесена в отдельный репозиторий **ansible-role-mongo**:
+    https://github.com/gvashchenkolineate/ansible-role-mongo
+    Её подключение теперь производится через _requirements.yml_ каждого окружения.
+
+  - Для репозитория ansible-role-mongo подключен TravisCI для выполнения Molecule-тестов,
+    которые выполняются на окружении, поднимаемом в GCE.
+
+    **Замечания**
+
+    - Molecule-проект был создан командой
+      ```
+      molecule init scenario -s default -r ansible-role-mongo -d gce
+      ```
+
+      Версия Molecule должна быть < 3.0, напр. 2.22, иначе `-s` аргумент не будет работать!
+
+      Версия Ansible должна быть < 2.12, т.к. в 2.12 модуль gce удален!
+
+    - Для Molecule-GCE интеграции для infra-проекта в GCP был создан Service Account, а также сгенерирован ssh-ключ.
+      Необходимо добавить этот ssh-ключ в Terraform-проекты prod и stage, чтобы он пересоздавался при поднятии окружения,
+      иначе тесты упадут!
+
+    - В [Travis-настройках](https://travis-ci.com/github/gvashchenkolineate/ansible-role-mongo) для репозитория ansible-role-mongo
+      необходимо снизить количество одновременно запускаемых билдов до одного, иначе билды будут падать,
+      т.к. инстанс для тестов поднимается в одном и том же GCP окружении.
+
+  - В заголовок [README.md](https://github.com/gvashchenkolineate/ansible-role-mongo/blob/master/README.md)
+    репозитория ansible-role-mongo добавлен бэйдж со статусом билда ветки _master_.
+
+  - Для TravisCI-билдов репозитория ansible-role-mongo настроены оповещения в [Slack-канал](https://devops-team-otus.slack.com/messages/georgy_vashchenko)
+
+## Как запустить проект:
+
+ - Для поднятия локальных ВМ app и db и провижининга их плэйбуком `site.yml` использовать команду
+   ```
+   cd ./ansible && vagrant up
+   ```
+   Для перепровижининга отдельных ВМ:
+   ```
+   vagrant provision <hostname>
+   ```
+
+   Для провижининга _app_ ВМ, создаваемой Vagrant'ом, необходимо задать `deploy_user=vagrant`
+
+ - _Желательно устанавливать зависимости в [virtualenv](https://docs.python-guide.org/dev/virtualenvs/)_
+
+   Для запуска Molecule-тестов можно использовать
+   ```
+   molecule create
+   molecule converge
+   molecule verify
+   ```
+
+ - Инстукции по настройке интеграции TravisCI-Molecule-GCE для репозитория ansible-role-mongo
+   [здесь](https://github.com/gvashchenkolineate/ansible-role-mongo/blob/master/README.md)
+
+## Как проверить работоспособность:
+
+ - После поднятия локальной виртуальной инфраструктуры Vagrant-ом
+   приложение должно быть доступно по адресу http://10.10.10.20
+
+ - Для проверки интеграции TravisCI-Molecule-GCE-Slack репозитория ansible-role-mongo
+   можно запушить коммит или создать PR.

@@ -19,3 +19,15 @@ variables.json
 *.retry
 # Ansible community roles
 jdauphant.nginx
+ansible/roles/db
+
+# Vagrant & Molecule
+.vagrant/
+*.log
+*.pyc
+.molecule
+.cache
+.pytest_cache
+
+# Python virtual env
+venv/

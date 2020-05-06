@@ -47,3 +47,8 @@ variable ssh_source_range {
   description = "IP range allowed to connect to instances via ssh"
   default     = ["0.0.0.0/0"]
 }
+
+variable deploy_app {
+  description = "Whether to deploy the app"
+  default = true
+}

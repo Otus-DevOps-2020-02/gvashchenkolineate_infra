@@ -18,7 +18,7 @@ module "app" {
   app_disk_image   = var.app_disk_image
   public_key_path  = var.public_key_path
   private_key_path = var.private_key_path
-  deploy_app = true
+  deploy_app = var.deploy_app
   database_url = module.db.internal_ip
 }
 //---------------------------------------------------------------------- db
